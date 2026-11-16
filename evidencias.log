@@ -228,3 +228,19 @@ available: 2 3 0 (esperado 2 3 0)
 exit
 
 Script done on 2026-11-16 16:15:48-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-11-16 17:07:40-03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="99" LINES="5"]
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ date
+[?2004lseg 16 nov 2026 17:07:42 -03
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ date[K[K[K[Kmake clean
+[?2004lrm -f banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make
+[?2004lgcc -Wall -Wextra -std=c11 -g banker.c -o banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make clean[6Pdate./banker 10 5 7
+[?2004lRelease from customer 0 the resources 0 1 0
+Erro: customer 0 tentou liberar mais do que possui.
+available: 3 4 2 (esperado 3 4 2)
+need[0]: 7 5 3 (esperado 7 5 3)
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ exit
+[?2004lexit
+
+Script done on 2026-11-16 17:08:45-03:00 [COMMAND_EXIT_CODE="0"]

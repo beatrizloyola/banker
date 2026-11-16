@@ -27,6 +27,16 @@
 - **Problema:** a simulação fazia `allocation -= req` e o rollback `allocation += req`, o inverso do certo. A alocação ficava negativa e `is_safe` negava tudo como "unsafe". Em execução real corromperia o estado.
 - **Correção:** simulação com `+=` e rollback com `-=`.
 
+### 6. `&rel` em vez de `rel` em `release_resources`
+- **Onde:** `banker.c:216`, `less_or_equal(&rel, ...)`.
+- **Problema:** `rel` já é ponteiro. `&rel` é o endereço da variável local, tipo `const int **`. A comparação lê lixo da pilha e recusa a liberação válida: `available` e `need` não mudam.
+- **Correção:** `less_or_equal(rel, &allocation[i * m])`.
+
+### 7. Aspas no lugar errado no `fprintf` de erro de RL
+- **Onde:** `banker.c:217`.
+- **Problema:** `"...possui.\n, i"` deixou o `, i` dentro da string. O `%d` fica sem argumento (comportamento indefinido) e a saída traz `, i` literal.
+- **Correção:** `"...possui.\n", i`.
+
 ## Abertos
 
 Nenhum.

@@ -210,6 +210,28 @@ int request_resources(int i, const int *req){
     return -1;
 }
 
+int release_resources(int i, const int *rel){
+// 0 liberado, -1 negado
+    // 1. release <= allocation
+    if(!less_or_equal(rel, &allocation[i * m])){
+        fprintf(stderr, "Erro: customer %d tentou liberar mais do que possui.\n", i);
+        return -1;
+    }
+
+    // 2. atualizar estado
+    for (int j = 0; j < m; j++){
+        available[j] += rel[j];
+        allocation[i * m + j] -= rel[j];
+        need[i * m + j] += rel[j];
+    }
+
+    // 3. saída
+    printf("Release from customer %d the resources ", i);
+    print_vec(rel);
+    printf("\n");
+    return 0;
+}
+
 int main(int argc, char *argv[]){
     if (argc < 2){
         fprintf(stderr, "Erro: quantidade de argumentos insuficiente.\n");
@@ -241,6 +263,24 @@ int main(int argc, char *argv[]){
         bank_free();
         return -1;
     }
+
+    // TEMP: Etapa 6, estado do livro
+    int alloc_livro[5][3] = {{0,1,0},{2,0,0},{3,0,2},{2,1,1},{0,0,2}};
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < m; j++){
+            allocation[i * m + j] = alloc_livro[i][j];
+            need[i * m + j] = max[i * m + j] - allocation[i * m + j];
+        }
+    }
+    available[0] = 3; available[1] = 3; available[2] = 2;
+
+    int l1[] = {0, 1, 0};   // cliente 0 tem 0 1 0
+    int l2[] = {1, 0, 0};   // cliente 0 não tem mais isso
+    release_resources(0, l1);   // esperado: Release from customer 0 the resources 0 1 0
+    release_resources(0, l2);   // esperado: erro no stderr, nada em stdout
+    printf("available: %d %d %d (esperado 3 4 2)\n", available[0], available[1], available[2]);
+    printf("need[0]: %d %d %d (esperado 7 5 3)\n", need[0], need[1], need[2]);
+    // FIM DE TEMP
 
     // etapas seguintes
 
