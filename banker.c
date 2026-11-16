@@ -75,11 +75,18 @@ int load_customers(void){
         if (buf[strspn(buf, " \t\r\n")] == '\0'){
             continue;   // linha em branco
         }
+        buf[strcspn(buf, "\r\n")] = '\0';
 
         int col = 0;
-        for (char *tok = strtok(buf, " ,\t\r\n"); tok; tok = strtok(NULL, " ,\t\r\n")){
+        char *p = buf;
+        while (1){
+            char *comma = strchr(p, ',');
+            if (comma != NULL){
+                *comma = '\0';
+            }
+            
             int v;
-            if (col >= m || parse_nonneg(tok, &v) != 0){
+            if (col >= m || *p < '0' || *p > '9' || parse_nonneg(p, &v) != 0){
                 fprintf(stderr, "Erro: linha %d inválida em customer.txt.\n", lineno);
                 fclose(f);
                 return -1;
@@ -92,6 +99,11 @@ int load_customers(void){
             max[row * m + col] = v;
             need[row * m + col] = v; // allocation é 0, então need = max
             col++;
+
+            if (comma == NULL){
+                break;
+            }
+            p = comma + 1;
         }
         if (col != m){
             fprintf(stderr, "Erro: linha %d deveria ter %d valores em customer.txt.\n", lineno, m);

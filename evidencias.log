@@ -326,3 +326,45 @@ Script started on 2026-11-16 17:33:35-03:00 [TERM="xterm-256color" TTY="/dev/pts
 [?2004lexit
 
 Script done on 2026-11-16 17:36:55-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-11-16 17:40:12-03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="67" LINES="20"]
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make clean
+[?2004lrm -f banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make
+[?2004lgcc -Wall -Wextra -std=c11 -g banker.c -o banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ sc[K[K^?[KB=$PWD/banker
+echo "### Etapa 9 - tratamento de erro - $(date)"
+
+t() {  # t "descrição" "customer.txt" "commands.txt" args...   ("-" = não criar o arquivo) 
+  d=$(mktemp -d); desc=$1; c=$2; k=$3; shift 3
+  [ "$c" != "-" ] && printf "$c" > $d/customer.txt
+  [ "$k" != "-" ] && printf "$k" > $d/commands.txt
+  echo "== $desc"
+  (cd $d && $B "$@" 2>&1; echo "exit=$?")
+  rm -rf $d
+}
+
+OKC='7,5,3\n3,2,2\n'
+OKK='RQ 0 0 2 1\n*\n'
+
+t "sem argumentos"                  "$OKC" "$OKK"
+t "argumento nao numerico"          "$OKC" "$OKK" 10 abc 7
+t "argumento negativo"              "$OKC" "$OKK" 10 -5 7
+t "args a menos que as colunas"     "$OKC" "$OKK" 10 5
+t "args a mais que as colunas"      "$OKC" "$OKK" 10 5 7 1t "customer.txt inexistente"        -      "$OKK" 10 5 7t "commands.txt inexistente"        "$OKC" -      10 5 7t "customer.txt vazio"              ""     "$OKK" 10 5 7t "virgula faltando"                '7 5,3\n3,2,2\n'  "$OKK" 10 5 7t "so espacos, sem virgula"         '7 5 3\n3 2 2\n'  "$OKK" 10 5 7t "virgula dupla"                   '7,,5,3\n3,2,2\n' "$OKK" 10 5 7t "virgula no fim"                  '7,5,3,\n3,2,2\n' "$OKK" 10 5 7t "letra no meio"                   '7,a,3\n3,2,2\n'  "$OKK" 10 5 7[7mt "max maior que o total"           '70,5,3\n3,2,2\n' "$OKK" 10 5 7[27m[7mt "commands.txt vazio"              "$OKC" ''     10 5 7[27m[7mt "RQ com valor a menos"            "$OKC" 'RQ 0 1 2\n' 10 5 7[27m[7mt "RQ com valor a mais"             "$OKC" 'RQ 0 1 2 3 4\n' 10 5 7[27m[7mt "id fora do intervalo"            "$OKC" 'RQ 9 1 2 3\n' 10 5 7[27m[7mt "numero negativo no comando"      "$OKC" 'RQ 0 -1 2 3\n' 10 5 7[27m[7mt "comando desconhecido"            "$OKC" 'RX 0 1 2 3\n' 10 5 7[27m[7m# sem permissão[27m[7md=$(mktemp -d); printf "$OKC" > $d/customer.txt; printf "$OKK" > $d[27m[7m/commands.txt[27m[7mchmod 000 $d/customer.txt[27m[7mecho "== customer.txt sem permissao"; (cd $d && $B 10 5 7 2>&1; ech[27m[7mo "exit=$?")[27m[7mchmod 644 $d/customer.txt; chmod 000 $d/commands.txt[27m[7mecho "== commands.txt sem permissao"; (cd $d && $B 10 5 7 2>&1; ech[27m[7mo "exit=$?")[27m[7mrm -rf $d[27mt "max maior que o total"           '70,5,3\n3,2,2\n' "$OKK" 10 5 7t "commands.txt vazio"              "$OKC" ''     10 5 7t "RQ com valor a menos"            "$OKC" 'RQ 0 1 2\n' 10 5 7t "RQ com valor a mais"             "$OKC" 'RQ 0 1 2 3 4\n' 10 5 7t "id fora do intervalo"            "$OKC" 'RQ 9 1 2 3\n' 10 5 7t "numero negativo no comando"      "$OKC" 'RQ 0 -1 2 3\n' 10 5 7t "comando desconhecido"            "$OKC" 'RX 0 1 2 3\n' 10 5 7# sem permissãod=$(mktemp -d); printf "$OKC" > $d/customer.txt; printf "$OKK" > $d/commands.txtchmod 000 $d/customer.txtecho "== customer.txt sem permissao"; (cd $d && $B 10 5 7 2>&1; echo "exit=$?")chmod 644 $d/customer.txt; chmod 000 $d/commands.txtecho "== commands.txt sem permissao"; (cd $d && $B 10 5 7 2>&1; echo "exit=$?")rm -rf $d
+[?2004l### Etapa 9 - tratamento de erro - seg 16 nov 2026 17:40:25 -03
+== sem argumentos
+Erro: quantidade de argumentos insuficiente.
+exit=255
+== argumento nao numerico
+Erro: argumento 'abc' inválido.
+exit=255
+== argumento negativo
+Erro: argumento '-5' inválido.
+exit=255
+== args a menos que as colunas
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== args a mais que as colunas
+Erro: linha 1 deveria ter 4 valores em customer.txt.
+exit=255
+== customer.txt ine

@@ -37,6 +37,14 @@
 - **Problema:** `"...possui.\n, i"` deixou o `, i` dentro da string. O `%d` fica sem argumento (comportamento indefinido) e a saída traz `, i` literal.
 - **Correção:** `"...possui.\n", i`.
 
+### 8. `customer.txt` aceita separador que não seja vírgula
+- **Onde:** `load_customers`, `strtok(buf, " ,\t\r\n")`.
+- **Problema:** `7 5,3`, `7 5 3`, `7,,5,3` e `7,5,3,` são aceitos sem erro e o programa roda normal. O enunciado manda recusar formatação diferente da indicada (vírgulas, ex.: `7,5,3`).
+- **Correção:** `strchr(p, ',')` em vez de `strtok`. O campo precisa começar com dígito, então vazio, espaço e sinal são recusados. Só `\r\n` no fim da linha é descartado.
+
 ## Abertos
 
-Nenhum.
+### 9. Mensagem dupla e incoerente quando `customer.txt` não abre
+- **Onde:** `main`, após `count_lines()`.
+- **Problema:** `count_lines` devolve -1 depois de imprimir "falha ao ler arquivo de entrada", e `main` imprime também "arquivo vazio". Vale para arquivo inexistente e sem permissão.
+- **Correção:** em `main`, tratar `n < 0` (erro já impresso) separado de `n == 0` ("arquivo vazio").
