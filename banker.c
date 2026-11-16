@@ -436,7 +436,10 @@ int main(int argc, char *argv[]){
 
     m = argc - 1;
     n = count_lines();
-    if (n <= 0){
+    if (n < 0){
+        return -1;   // count_lines já imprimiu o erro
+    }
+    if (n == 0){
         fprintf(stderr, "Erro: arquivo vazio.\n");
         return -1;
     }

@@ -42,9 +42,11 @@
 - **Problema:** `7 5,3`, `7 5 3`, `7,,5,3` e `7,5,3,` são aceitos sem erro e o programa roda normal. O enunciado manda recusar formatação diferente da indicada (vírgulas, ex.: `7,5,3`).
 - **Correção:** `strchr(p, ',')` em vez de `strtok`. O campo precisa começar com dígito, então vazio, espaço e sinal são recusados. Só `\r\n` no fim da linha é descartado.
 
-## Abertos
-
 ### 9. Mensagem dupla e incoerente quando `customer.txt` não abre
 - **Onde:** `main`, após `count_lines()`.
 - **Problema:** `count_lines` devolve -1 depois de imprimir "falha ao ler arquivo de entrada", e `main` imprime também "arquivo vazio". Vale para arquivo inexistente e sem permissão.
-- **Correção:** em `main`, tratar `n < 0` (erro já impresso) separado de `n == 0` ("arquivo vazio").
+- **Correção:** em `main`, `n < 0` sai sem mensagem nova (erro já impresso) e só `n == 0` imprime "arquivo vazio".
+
+## Abertos
+
+Nenhum.

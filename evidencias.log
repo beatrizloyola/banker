@@ -367,4 +367,130 @@ exit=255
 == args a mais que as colunas
 Erro: linha 1 deveria ter 4 valores em customer.txt.
 exit=255
-== customer.txt ine
+== customer.txt inexistente
+Erro: falha ao ler arquivo de entrada.
+Erro: arquivo vazio.
+exit=255
+== commands.txt inexistente
+Erro: falha ao ler arquivo de comandos.
+exit=255
+== customer.txt vazio
+Erro: arquivo vazio.
+exit=255
+== virgula faltando
+exit=0
+== so espacos, sem virgula
+exit=0
+== virgula dupla
+exit=0
+== virgula no fim
+exit=0
+== letra no meio
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== max maior que o total
+Erro: max excede o total do recurso 0 na linha 1 em customer.txt.
+exit=255
+== commands.txt vazio
+exit=0
+== RQ com valor a menos
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== RQ com valor a mais
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== id fora do intervalo
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== numero negativo no comando
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== comando desconhecido
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== customer.txt sem permissao
+Erro: falha ao ler arquivo de entrada.
+Erro: arquivo vazio.
+exit=255
+== commands.txt sem permissao
+Erro: falha ao ler arquivo de comandos.
+exit=255
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make clean
+[?2004lrm -f banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make
+[?2004lgcc -Wall -Wextra -std=c11 -g banker.c -o banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ B=$PWD/banker
+echo "### Etapa 9 - tratamento de erro - $(date)"
+
+t() {  # t "descrição" "customer.txt" "commands.txt" args...   ("-" = não criar o arquivo) 
+  d=$(mktemp -d); desc=$1; c=$2; k=$3; shift 3  [ "$c" != "-" ] && printf "$c" > $d/customer.txt  [ "$k" != "-" ] && printf "$k" > $d/commands.txt  echo "== $desc"  (cd $d && $B "$@" 2>&1; echo "exit=$?")  rm -rf $d}OKC='7,5,3\n3,2,2\n'OKK='RQ 0 0 2 1\n*\n't "sem argumentos"                  "$OKC" "$OKK"t "argumento nao numerico"          "$OKC" "$OKK" 10 abc 7t "argumento negativo"              "$OKC" "$OKK" 10 -5 7t "args a menos que as colunas"     "$OKC" "$OKK" 10 5t "args a mais que as colunas"      "$OKC" "$OKK" 10 5 7 1t "customer.txt inexistente"        -      "$OKK" 10 5 7t "commands.txt inexistente"        "$OKC" -      10 5 7t "customer.txt vazio"              ""     "$OKK" 10 5 7t "virgula faltando"                '7 5,3\n3,2,2\n'  "$OKK" 10 5 7t "so espacos, sem virgula"         '7 5 3\n3 2 2\n'  "$OKK" 10 5 7t "virgula dupla"                   '7,,5,3\n3,2,2\n' "$OKK" 10 5 7t "virgula no fim"                  '7,5,3,\n3,2,2\n' "$OKK" 10 5 7t "letra no meio"                   '7,a,3\n3,2,2\n'  "$OKK" 10 5 7t "max maior que o total"           '70,5,3\n3,2,2\n' "$OKK" 10 5 7t "commands.txt vazio"              "$OKC" ''     10 5 7t "RQ com valor a menos"            "$OKC" 'RQ 0 1 2\n' 10 5 7t "RQ com valor a mais"             "$OKC" 'RQ 0 1 2 3 4\n' 10 5 7t "id fora do intervalo"            "$OKC" 'RQ 9 1 2 3\n' 10 5 7t "numero negativo no comando"      "$OKC" 'RQ 0 -1 2 3\n' 10 5 7t "comando desconhecido"            "$OKC" 'RX 0 1 2 3\n' 10 5 7# sem permissãod=$(mktemp -d); printf "$OKC" > $d/customer.txt; printf "$OKK" > $d/commands.txtchmod 000 $d/customer.txtecho "== customer.txt sem permissao"; (cd $d && $B 10 5 7 2>&1; echo "exit=$?")[7mchmod 644 $d/customer.txt; chmod 000 $d/commands.txt[27m[7mecho "== commands.txt sem permissao"; (cd $d && $B 10 5 7 2>&1; ech[27m[7mo "exit=$?")[27m[7mrm -rf $d[27mchmod 644 $d/customer.txt; chmod 000 $d/commands.txtecho "== commands.txt sem permissao"; (cd $d && $B 10 5 7 2>&1; echo "exit=$?")rm -rf $d
+[?2004l### Etapa 9 - tratamento de erro - seg 16 nov 2026 17:46:56 -03
+== sem argumentos
+Erro: quantidade de argumentos insuficiente.
+exit=255
+== argumento nao numerico
+Erro: argumento 'abc' inválido.
+exit=255
+== argumento negativo
+Erro: argumento '-5' inválido.
+exit=255
+== args a menos que as colunas
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== args a mais que as colunas
+Erro: linha 1 deveria ter 4 valores em customer.txt.
+exit=255
+== customer.txt inexistente
+Erro: falha ao ler arquivo de entrada.
+exit=255
+== commands.txt inexistente
+Erro: falha ao ler arquivo de comandos.
+exit=255
+== customer.txt vazio
+Erro: arquivo vazio.
+exit=255
+== virgula faltando
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== so espacos, sem virgula
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== virgula dupla
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== virgula no fim
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== letra no meio
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== max maior que o total
+Erro: max excede o total do recurso 0 na linha 1 em customer.txt.
+exit=255
+== commands.txt vazio
+exit=0
+== RQ com valor a menos
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== RQ com valor a mais
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== id fora do intervalo
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== numero negativo no comando
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== comando desconhecido
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== customer.txt sem permissao
+Erro: falha ao ler arquivo de entrada.
+exit=255
+== commands.txt sem permissao
+Erro: falha ao ler arquivo de comandos.
+exit=255
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ exit
+[?2004lexit
+
+Script done on 2026-11-16 17:47:13-03:00 [COMMAND_EXIT_CODE="0"]
