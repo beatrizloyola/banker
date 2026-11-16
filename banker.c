@@ -8,7 +8,7 @@ int n, m;
 int *available, *total;
 int *max, *allocation, *need;
 
-int count_lines(){
+int count_lines(void){
     FILE *f = fopen("customer.txt", "r");
     if (f == NULL){
         fprintf(stderr, "Erro: falha ao ler arquivo de entrada.\n");
@@ -50,7 +50,7 @@ int bank_alloc(void){
     return 0;
 }
 
-static int parse_nonneg(const char *s, int *out){
+int parse_nonneg(const char *s, int *out){
     char *end;
     errno = 0;
     long v = strtol(s, &end, 10);
@@ -103,6 +103,54 @@ int load_customers(void){
 
     fclose(f);
     return 0;
+}
+
+int less_or_equal(const int *a, const int *b){
+    for (int j = 0; j < m; j++){
+        if (a[j] > b[j]){
+            return 0;
+        }
+    }
+    return 1;
+}
+
+// 1 é seguro, 0 é inseguro, -1 é falha de memória
+int is_safe(void){
+    int *work = malloc(m * sizeof(int));
+    int *finish = calloc( n, sizeof(int));
+    if (!work || !finish){
+        free(work);
+        free(finish);
+        fprintf(stderr, "Erro: falha na alocação de memória.\n");
+        return -1;
+    }
+    memcpy(work, available, m * sizeof(int));
+
+    // evita laço infinito. para quando uma passada inteira não acha ninguém
+    int progress = 1;
+    while (progress){
+        progress = 0;
+        for (int i = 0; i < n; i++){
+            if(!finish[i] && less_or_equal(&need[i * m], work)){
+                for (int j = 0; j < m; j++){
+                    work[j] += allocation[i * m + j];
+                }
+                finish[i] = 1;
+                progress = 1;
+            }
+        }
+    }
+
+    int safe = 1;
+    for (int i = 0; i < n; i++){
+        if(!finish[i]){
+            safe = 0;
+        }
+    }
+
+    free(work);
+    free(finish);
+    return safe;
 }
 
 int main(int argc, char *argv[]){

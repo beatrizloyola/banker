@@ -175,4 +175,26 @@ exit=0
 [?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ 
 [K
 ]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ 
-
+Script started on 2026-11-16 15:40:02-03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="103" LINES="5"]
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ date
+[?2004lseg 16 nov 2026 15:40:06 -03
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make clean
+[?2004lrm -f banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make
+[?2004lgcc -Wall -Wextra -std=c11 -g banker.c -o banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ./banker 10 5 7
+[?2004lis_safe = 1 (esperado 1)
+is_safe = 0 (esperado 0)
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make clean
+[?2004lrm -f banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [7mgcc -Wall -Wextra -g -fsanitize=address,undefined banker.c -[27m[7mo[27m[7m banker_asan [27m
+[7m./banker_asan 10 5 7[27m
+[A[A[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cgcc -Wall -Wextra -g -fsanitize=address,undefined banker.c -o banker_asan
+./banker_asan 10 5 7
+[A
+[?2004lis_safe = 1 (esperado 1)
+is_safe = 0 (esperado 0)
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [K]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ [?2004l
+exit
+
+Script done on 2026-11-16 15:51:50-03:00 [COMMAND_EXIT_CODE="0"]
