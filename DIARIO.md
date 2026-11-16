@@ -17,6 +17,16 @@
 - **Problema:** o texto diz `recurso %d na linha %d`, mas os argumentos eram `(lineno, col)`. Com `./banker 1 1 1` saía "recurso 1 na linha 0" em vez de "recurso 0 na linha 1".
 - **Correção:** argumentos passados na ordem `col, lineno`.
 
+### 4. `print_vec` imprimia o primeiro número duas vezes
+- **Onde:** `print_vec`, Etapa 5.
+- **Problema:** `printf("%d", v[0])` antes do laço, e o laço começava em `j = 0`. O vetor `1 0 2` saía `1 1 0 2`.
+- **Correção:** laço começando em `j = 1`.
+
+### 5. Sinal errado em `allocation` na simulação de RQ
+- **Onde:** `request_resources`, passos 3 e 5.
+- **Problema:** a simulação fazia `allocation -= req` e o rollback `allocation += req`, o inverso do certo. A alocação ficava negativa e `is_safe` negava tudo como "unsafe". Em execução real corromperia o estado.
+- **Correção:** simulação com `+=` e rollback com `-=`.
+
 ## Abertos
 
 Nenhum.

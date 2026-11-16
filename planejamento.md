@@ -98,7 +98,3 @@ Casos a testar:
 - **Relatório PDF (10%):** algoritmo, estruturas de dados, decisões, prints de teste, nota sobre o erro de digitação do PDF.
 - **GitHub:** código, Makefile, README, relatório e `evidencias.log`. Não enviar os arquivos do professor.
 - **Classroom:** PDF + `.tar` (código e Makefile). Nomes `login.pdf` e `login.tar`.
-- Prazo: o enunciado só cita a data para alunos com laudo (quarta, 18/11). Confirmar o prazo geral com o professor.
-
-## Próximo passo
-Começar pelas etapas 1 e 2 (alocação dinâmica e argumentos) e mostrar o código para revisão antes de seguir ao parser.

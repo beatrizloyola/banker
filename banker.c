@@ -114,8 +114,8 @@ int less_or_equal(const int *a, const int *b){
     return 1;
 }
 
-// 1 é seguro, 0 é inseguro, -1 é falha de memória
 int is_safe(void){
+// 1 é seguro, 0 é inseguro, -1 é falha de memória
     int *work = malloc(m * sizeof(int));
     int *finish = calloc( n, sizeof(int));
     if (!work || !finish){
@@ -151,6 +151,63 @@ int is_safe(void){
     free(work);
     free(finish);
     return safe;
+}
+
+void print_vec(const int *v){
+    printf("%d", v[0]);
+    for (int j = 1; j < m; j++){
+        printf(" %d", v[j]);
+    }
+}
+
+int request_resources(int i, const int *req){
+// 0 concedido, -1 negado
+    // 1. request <= need
+    if(!less_or_equal(req, &need[i * m])){
+        printf("The customer %d request ", i);
+        print_vec(req);
+        printf(" was denied because exceed its maximum allocation\n");
+        return -1;
+    }
+
+    // 2. request <= available
+    if(!less_or_equal(req, available)){
+        printf("The resources ");
+        print_vec(available);
+        printf(" are not enough to customer %d request ", i);
+        print_vec(req);
+        printf(" \n");
+        return -1;
+    }
+
+    // 3. simular
+    for (int j = 0; j < m; j++){
+        available[j] -= req[j];
+        allocation[i * m + j] += req[j];
+        need[i * m + j] -= req[j];
+    }
+
+    // 4. conferir se é seguro
+    int safe = is_safe();
+    if (safe == 1){
+        printf("Allocate to customer %d the resources ", i);
+        print_vec(req);
+        printf("\n");
+        return 0;
+    }
+
+    // 5. rollback
+    for (int j = 0; j < m; j++){
+        available[j] += req[j];
+        allocation[i * m + j] -= req[j];
+        need[i * m + j] += req[j];
+    }
+    if (safe == 0){
+        printf("The customer %d request ", i);
+        print_vec(req);
+        printf(" was denied because result in an unsafe state\n");
+    }
+    return -1;
 }
 
 int main(int argc, char *argv[]){
