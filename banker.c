@@ -232,6 +232,70 @@ int release_resources(int i, const int *rel){
     return 0;
 }
 
+int print_vec_sp(const int *v){
+// imprime e devolve quantos caracteres saíram
+    int count = 0;
+    for (int j =0; j < m; j++){
+        count += printf("%d ", v[j]);
+    }
+    return count;
+}
+
+void pad(int n_chars, int width){
+    for (int k = n_chars; k < width; k++){
+        printf(" ");
+    }
+}
+
+static int num_len(int x){
+// quantidade de dígitos de x (x >= 0)
+    int d = 1;
+    while (x >= 10){
+        x /= 10;
+        d++;
+    }
+    return d;
+}
+
+static int vec_len(const int *v){
+// tamanho de "a b c " (cada número + 1 espaço)
+    int len = 0;
+    for (int j = 0; j < m; j++){
+        len += num_len(v[j]) + 1;
+    }
+    return len;
+}
+
+static int col_width(const int *mat, int minimo){
+// largura da coluna é o maior entre o mínimo e a linha mais comprida
+    int w = minimo;
+    for (int i = 0; i < n; i++){
+        int l = vec_len(&mat[i * m]);
+        if (l > w){
+            w = l;
+        }
+    }
+    return w;
+}
+
+void print_state(void){
+// mínimos 10 e 12 reproduzem o result.txt do professor com m = 3
+    int w1 = col_width(max, 10);
+    int w2 = col_width(allocation, 12);
+
+    printf("%-*s|   %-*s|   NEED\n", w1, "MAXIMUM", w2, "ALLOCATION");
+    for(int i = 0; i < n; i++){
+        pad(print_vec_sp(&max[i * m]), w1);
+        printf("|   ");
+        pad(print_vec_sp(&allocation[i * m]), w2);
+        printf("|   ");
+        print_vec_sp(&need[i * m]);
+        printf("\n");
+    }
+    printf("AVAILABLE ");
+    print_vec_sp(available);
+    printf("\n");
+}
 
 typedef enum {
     CMD_RQ,
@@ -242,7 +306,7 @@ typedef enum {
 typedef struct {
     CmdType type;
     int id;
-    int *vals;   // m valores (RQ/RL), NULL para CMD_STAR
+    int *vals; // m valores (RQ/RL), NULL para CMD_STAR
 } Cmd;
 
 // parseia uma linha, cmd->vals deve ter espaço para m ints
@@ -284,7 +348,7 @@ int parse_line(char *buf, Cmd *cmd){
         }
     }
     if (strtok(NULL, delim) != NULL){
-        return -1;   // número a mais
+        return -1; // número a mais
     }
     return 0;
 }
@@ -391,6 +455,14 @@ int main(int argc, char *argv[]){
         return -1;
     }
 
+    // só abre result.txt depois que commands.txt foi validado
+    if (freopen("result.txt", "w", stdout) == NULL){
+        fprintf(stderr, "Erro: falha ao criar result.txt.\n");
+        free_commands(cmds, ncmds);
+        bank_free();
+        return -1;
+    }
+
     for (int k = 0; k < ncmds; k++){
         switch (cmds[k].type){
             case CMD_RQ:
@@ -400,15 +472,12 @@ int main(int argc, char *argv[]){
                 release_resources(cmds[k].id, cmds[k].vals);
                 break;
             case CMD_STAR:
-                // Etapa 8: imprimir a tabela e o AVAILABLE
+                print_state();
                 break;
         }
     }
 
     free_commands(cmds, ncmds);
-
-    // etapas seguintes
-
     bank_free();
     return 0;
 }
