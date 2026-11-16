@@ -3,8 +3,8 @@ CFLAGS = -Wall -Wextra -std=c11 -g
 
 all: banker
 
-banker: main.c
-	$(CC) $(CFLAGS) main.c -o banker
+banker: banker.c
+	$(CC) $(CFLAGS) banker.c -o banker
 
 clean:
 	rm -f banker

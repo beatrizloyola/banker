@@ -1,5 +1,8 @@
 # Planejamento — Algoritmo do Banqueiro
 
+- O main deve se chamar banker.c
+- Tudo deve estar em um arquivo só (banker.c)
+
 ## O que o enunciado pede
 - Implementar em C o algoritmo do Banqueiro; `make` gera o executável `banker`.
 - Chamada: `./banker 10 5 7`. Cada argumento é o total de instâncias de um recurso, então **m = argc-1**.
