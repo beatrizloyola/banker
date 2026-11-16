@@ -1,0 +1,178 @@
+Script started on 2026-11-16 15:09:29-03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="83" LINES="9"]
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ whoami
+[?2004l
+loyola
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ dare[K[Kte
+[?2004l
+seg 16 nov 2026 15:09:34 -03
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ pwd
+[?2004l
+/home/loyola/Documents/banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ^?[K[7m./banker 10 5 7[27m./banker 10 5 7
+[?2004l
+bash: ./banker: No such file or directory
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make
+[?2004l
+gcc -Wall -Wextra -std=c11 -g banker.c -o banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make./banker 10 5 7
+[?2004l
+Erro: falha ao ler arquivo de entrada.
+Erro: arquivo vazio.
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ./banker 10 5 7
+[?2004l
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ./banker 10 5 7[C[C[1P 7a 7b 7c 7[C 7[1P7
+[?2004l
+Erro: argumento 'abc' inválido.
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ./banker 10 abc 7[1P[1P[1P[C[1P 7[C 7- 75 7
+[?2004l
+Erro: argumento '-5' inválido.
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ./banker 10 -5 7[C[1@abc[C[C[2P5[C[C[K9[K0
+[?2004l
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ./banker 10 5 0[K99999999999999999999
+[?2004l
+Erro: argumento '99999999999999999999' inválido.
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ./banker 10 5 99999999999999999999[C[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kr
+[?2004l
+Erro: quantidade de argumentos insuficiente.
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make clean
+[?2004l
+rm -f banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make
+[?2004l
+gcc -Wall -Wextra -std=c11 -g banker.c -o banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ 
+[K
+]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ 
+[K
+]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ 
+[K
+]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ 
+[K
+]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ 
+[K
+]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ^?[KB=$PWD/banker
+
+t() {  # t "descrição" "conteúdo do customer.txt" args...
+
+[7m  d=$(mktemp -d); desc=$1; content=$2; shift 2[27m
+
+[7m  printf "$content" > $d/customer.txt[27m
+
+[7m  echo "== $desc"[27m
+
+[7m  (cd $d && $B "$@"; echo "exit=$?")[27m
+
+[7m  rm -rf $d[27m
+
+[7m}[27m
+
+
+[7mt "OK (esperado: need = max, exit=0)"   "7,5,3\n3,2,2\n"       10 5 7[27m
+
+[7mt "valor a menos"                       "7,5\n3,2,2\n"         10 5 7[27m
+
+[7mt "valor a mais"                        "7,5,3,1\n3,2,2\n"     10 5 7[27m
+
+[7mt "letra"                               "7,a,3\n3,2,2\n"       10 5 7[27m
+
+[7mt "negativo"                            "7,-5,3\n3,2,2\n"      10 5 7[27m
+
+[7mt "max > total"                         "7,5,3\n3,2,2\n"       1 1 1[27m
+
+[7mt "linha em branco no meio"             "7,5,3\n\n3,2,2\n"     10 5 7[27m
+
+[7mt "linha em branco no fim"              "7,5,3\n3,2,2\n\n\n"   10 5 7[27m
+
+[7mt "arquivo vazio"                       ""                     10 5 7[27m
+
+[7mt "CRLF"                                "7,5,3\r\n3,2,2\r\n"   10 5 7[27m
+
+[7mt "espaços ao redor"                    " 7 , 5 , 3 \n3,2,2\n" 10 5 7[27m
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A  d=$(mktemp -d); desc=$1; content=$2; shift 2
+
+  printf "$content" > $d/customer.txt
+
+  echo "== $desc"
+
+  (cd $d && $B "$@"; echo "exit=$?")
+
+  rm -rf $d
+
+}
+
+
+t "OK (esperado: need = max, exit=0)"   "7,5,3\n3,2,2\n"       10 5 7
+
+t "valor a menos"                       "7,5\n3,2,2\n"         10 5 7
+
+t "valor a mais"                        "7,5,3,1\n3,2,2\n"     10 5 7
+
+t "letra"                               "7,a,3\n3,2,2\n"       10 5 7
+
+t "negativo"                            "7,-5,3\n3,2,2\n"      10 5 7
+
+t "max > total"                         "7,5,3\n3,2,2\n"       1 1 1
+
+t "linha em branco no meio"             "7,5,3\n\n3,2,2\n"     10 5 7
+
+t "linha em branco no fim"              "7,5,3\n3,2,2\n\n\n"   10 5 7
+
+t "arquivo vazio"                       ""                     10 5 7
+
+t "CRLF"                                "7,5,3\r\n3,2,2\r\n"   10 5 7
+
+t "espaços ao redor"                    " 7 , 5 , 3 \n3,2,2\n" 10 5 7
+
+[?2004l
+== OK (esperado: need = max, exit=0)
+total: 10 5 7
+max | need
+7 5 3 | 7 5 3 
+3 2 2 | 3 2 2 
+exit=0
+== valor a menos
+Erro: linha 1 deveria ter 3 valores em customer.txt.
+exit=255
+== valor a mais
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== letra
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== negativo
+Erro: linha 1 inválida em customer.txt.
+exit=255
+== max > total
+Erro: max excede o total do recurso 0 na linha 1 em customer.txt.
+exit=255
+== linha em branco no meio
+total: 10 5 7
+max | need
+7 5 3 | 7 5 3 
+3 2 2 | 3 2 2 
+exit=0
+== linha em branco no fim
+total: 10 5 7
+max | need
+7 5 3 | 7 5 3 
+3 2 2 | 3 2 2 
+exit=0
+== arquivo vazio
+Erro: arquivo vazio.
+exit=255
+== CRLF
+total: 10 5 7
+max | need
+7 5 3 | 7 5 3 
+3 2 2 | 3 2 2 
+exit=0
+== espaços ao redor
+total: 10 5 7
+max | need
+7 5 3 | 7 5 3 
+3 2 2 | 3 2 2 
+exit=0
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ 
+[K
+]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ 
+

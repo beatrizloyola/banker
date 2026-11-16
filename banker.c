@@ -61,6 +61,50 @@ static int parse_nonneg(const char *s, int *out){
     return 0;
 }
 
+int load_customers(void){
+    FILE *f = fopen("customer.txt", "r");
+    if (f == NULL){
+        fprintf(stderr, "Erro: falha ao ler arquivo de entrada.\n");
+        return -1;
+    }
+
+    char buf[256];
+    int row = 0, lineno = 0;
+    while (fgets(buf, sizeof buf, f) != NULL){
+        lineno++;
+        if (buf[strspn(buf, " \t\r\n")] == '\0'){
+            continue;   // linha em branco
+        }
+
+        int col = 0;
+        for (char *tok = strtok(buf, " ,\t\r\n"); tok; tok = strtok(NULL, " ,\t\r\n")){
+            int v;
+            if (col >= m || parse_nonneg(tok, &v) != 0){
+                fprintf(stderr, "Erro: linha %d inválida em customer.txt.\n", lineno);
+                fclose(f);
+                return -1;
+            }
+            if (v > total[col]){
+                fprintf(stderr, "Erro: max excede o total do recurso %d na linha %d em customer.txt.\n", col, lineno);
+                fclose(f);
+                return -1;
+            }
+            max[row * m + col] = v;
+            need[row * m + col] = v; // allocation é 0, então need = max
+            col++;
+        }
+        if (col != m){
+            fprintf(stderr, "Erro: linha %d deveria ter %d valores em customer.txt.\n", lineno, m);
+            fclose(f);
+            return -1;
+        }
+        row++;
+    }
+
+    fclose(f);
+    return 0;
+}
+
 int main(int argc, char *argv[]){
     if (argc < 2){
         fprintf(stderr, "Erro: quantidade de argumentos insuficiente.\n");
@@ -88,6 +132,10 @@ int main(int argc, char *argv[]){
         available[j] = total[j];
     }
 
+    if (load_customers() != 0){
+        bank_free();
+        return -1;
+    }
 
     // etapas seguintes
 
