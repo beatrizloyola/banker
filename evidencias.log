@@ -244,3 +244,68 @@ need[0]: 7 5 3 (esperado 7 5 3)
 [?2004lexit
 
 Script done on 2026-11-16 17:08:45-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-11-16 17:22:02-03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="67" LINES="13"]
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make clean
+[?2004lrm -f banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ make
+[?2004lgcc -Wall -Wextra -std=c11 -g banker.c -o banker
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ ^?[KB=$PWD/banker
+t() {  # t "descrição" "conteúdo do commands.txt"
+  d=$(mktemp -d); desc=$1; content=$2
+  cp customer.txt $d/
+  printf "$content" > $d/commands.txt
+  echo "== $desc"
+  (cd $d && $B 10 5 7; echo "exit=$?")
+  rm -rf $d
+}
+
+t "OK (esperado: 2 linhas, exit=0)"   "RQ 0 0 2 1\nRL 0 0 1 1\n"
+t "RQ com valor a menos"              "RQ 0 0 0 1\nRQ 0 1 2\n"
+[7mt "RQ com valor a mais"               "RQ 0 0 0 1\nRQ 0 1 2 3 4\n"[27m
+[7mt "id fora do intervalo"              "RQ 0 0 0 1\nRQ 9 1 2 3\n"[27m[7mt "comando desconhecido"              "RQ 0 0 0 1\nRX 0 1 2 3\n"[27m[7mt "número negativo"                   "RQ 0 0 0 1\nRQ 0 -1 2 3\n"[27m[7mt "letra no lugar do número"          "RQ 0 0 0 1\nRQ 0 a 2 3\n"[27m[7mt "RL com valor a menos"              "RL 0 1 2\n"[27m[7mt "* com lixo depois"                 "RQ 0 0 0 1\n* x\n"[27m[7mt "RQ sem id nem valores"             "RQ\n"[27m[7mt "linha em branco no meio"           "RQ 0 0 0 1\n\nRL 0 0 0 1\n"[27m[7mt "arquivo vazio"                     ""[27m[7mt "CRLF"                              "RQ 0 0 0 1\r\nRL 0 0 0 1\r\n[27m[7m"[27m[At "RQ com valor a mais"               "RQ 0 0 0 1\nRQ 0 1 2 3 4\n"
+t "id fora do intervalo"              "RQ 0 0 0 1\nRQ 9 1 2 3\n"t "comando desconhecido"              "RQ 0 0 0 1\nRX 0 1 2 3\n"t "número negativo"                   "RQ 0 0 0 1\nRQ 0 -1 2 3\n"t "letra no lugar do número"          "RQ 0 0 0 1\nRQ 0 a 2 3\n"t "RL com valor a menos"              "RL 0 1 2\n"t "* com lixo depois"                 "RQ 0 0 0 1\n* x\n"t "RQ sem id nem valores"             "RQ\n"t "linha em branco no meio"           "RQ 0 0 0 1\n\nRL 0 0 0 1\n"t "arquivo vazio"                     ""t "CRLF"                              "RQ 0 0 0 1\r\nRL 0 0 0 1\r\n"
+[?2004l== OK (esperado: 2 linhas, exit=0)
+Allocate to customer 0 the resources 0 2 1
+Release from customer 0 the resources 0 1 1
+exit=0
+== RQ com valor a menos
+Erro: linha 2 inválida em commands.txt.
+exit=255
+== RQ com valor a mais
+Erro: linha 2 inválida em commands.txt.
+exit=255
+== id fora do intervalo
+Erro: linha 2 inválida em commands.txt.
+exit=255
+== comando desconhecido
+Erro: linha 2 inválida em commands.txt.
+exit=255
+== número negativo
+Erro: linha 2 inválida em commands.txt.
+exit=255
+== letra no lugar do número
+Erro: linha 2 inválida em commands.txt.
+exit=255
+== RL com valor a menos
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== * com lixo depois
+Erro: linha 2 inválida em commands.txt.
+exit=255
+== RQ sem id nem valores
+Erro: linha 1 inválida em commands.txt.
+exit=255
+== linha em branco no meio
+Allocate to customer 0 the resources 0 0 1
+Release from customer 0 the resources 0 0 1
+exit=0
+== arquivo vazio
+exit=0
+== CRLF
+Allocate to customer 0 the resources 0 0 1
+Release from customer 0 the resources 0 0 1
+exit=0
+[?2004h]0;loyola@loyola-dell-g15: ~/Documents/banker[01;32mloyola@loyola-dell-g15[00m:[01;34m~/Documents/banker[00m$ exit
+[?2004lexit
+
+Script done on 2026-11-16 17:22:27-03:00 [COMMAND_EXIT_CODE="0"]

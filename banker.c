@@ -232,6 +232,126 @@ int release_resources(int i, const int *rel){
     return 0;
 }
 
+
+typedef enum {
+    CMD_RQ,
+    CMD_RL,
+    CMD_STAR
+} CmdType;
+
+typedef struct {
+    CmdType type;
+    int id;
+    int *vals;   // m valores (RQ/RL), NULL para CMD_STAR
+} Cmd;
+
+// parseia uma linha, cmd->vals deve ter espaço para m ints
+// 0 ok, 1 linha vazia, -1 erro de formato
+int parse_line(char *buf, Cmd *cmd){
+    const char *delim = " \t\r\n";
+    char *tok = strtok(buf, delim);
+    if (tok == NULL){
+        return 1;
+    }
+
+    if (strcmp(tok, "*") == 0){
+        if (strtok(NULL, delim) != NULL){
+            return -1;
+        }
+        cmd->type = CMD_STAR;
+        return 0;
+    }
+
+    if (strcmp(tok, "RQ") == 0){
+        cmd->type = CMD_RQ;
+    } else if (strcmp(tok, "RL") == 0){
+        cmd->type = CMD_RL;
+    } else {
+        return -1;
+    }
+
+    // id do cliente
+    tok = strtok(NULL, delim);
+    if (tok == NULL || parse_nonneg(tok, &cmd->id) != 0 || cmd->id >= n){
+        return -1;
+    }
+
+    // exatamente m valores
+    for (int j = 0; j < m; j++){
+        tok = strtok(NULL, delim);
+        if (tok == NULL || parse_nonneg(tok, &cmd->vals[j]) != 0){
+            return -1;
+        }
+    }
+    if (strtok(NULL, delim) != NULL){
+        return -1;   // número a mais
+    }
+    return 0;
+}
+
+void free_commands(Cmd *cmds, int count){
+    for (int i = 0; i < count; i++){
+        free(cmds[i].vals);
+    }
+    free(cmds);
+}
+
+static int abort_load(FILE *f, Cmd *cmds, int cnt){
+// limpeza de erro de load_commands (libera comandos aceitos e fecha o arquivo)
+    free_commands(cmds, cnt);
+    fclose(f);
+    return -1;
+}
+
+int load_commands(const char *path, Cmd **out, int *count){
+// lê e valida commands.txt inteiro antes de executar
+// aloca *out (count comandos). 0 ok, -1 erro.
+    FILE *f = fopen(path, "r");
+    if (f == NULL){
+        fprintf(stderr, "Erro: falha ao ler arquivo de comandos.\n");
+        return -1;
+    }
+
+    Cmd *cmds = NULL;
+    int cap = 0, cnt = 0, lineno = 0;
+    char buf[256];
+
+    while (fgets(buf, sizeof buf, f) != NULL){
+        lineno++;
+        if (cnt == cap){
+            cap = cap ? cap * 2 : 16;
+            Cmd *tmp = realloc(cmds, cap * sizeof(Cmd));
+            if (tmp == NULL){
+                return abort_load(f, cmds, cnt);
+            }
+            cmds = tmp;
+        }
+
+        Cmd *c = &cmds[cnt];
+        c->vals = malloc(m * sizeof(int));
+        if (c->vals == NULL){
+            return abort_load(f, cmds, cnt);
+        }
+
+        int r = parse_line(buf, c);
+        if (r == 1){
+            free(c->vals);
+            continue;
+        }
+        if (r < 0){
+            fprintf(stderr, "Erro: linha %d inválida em commands.txt.\n", lineno);
+            free(c->vals);
+            return abort_load(f, cmds, cnt);
+        }
+        cnt++;
+    }
+
+    fclose(f);
+    *out = cmds;
+    *count = cnt;
+    return 0;
+}
+
 int main(int argc, char *argv[]){
     if (argc < 2){
         fprintf(stderr, "Erro: quantidade de argumentos insuficiente.\n");
@@ -264,23 +384,28 @@ int main(int argc, char *argv[]){
         return -1;
     }
 
-    // TEMP: Etapa 6, estado do livro
-    int alloc_livro[5][3] = {{0,1,0},{2,0,0},{3,0,2},{2,1,1},{0,0,2}};
-    for (int i = 0; i < n; i++){
-        for (int j = 0; j < m; j++){
-            allocation[i * m + j] = alloc_livro[i][j];
-            need[i * m + j] = max[i * m + j] - allocation[i * m + j];
+    Cmd *cmds = NULL;
+    int ncmds = 0;
+    if (load_commands("commands.txt", &cmds, &ncmds) != 0){
+        bank_free();
+        return -1;
+    }
+
+    for (int k = 0; k < ncmds; k++){
+        switch (cmds[k].type){
+            case CMD_RQ:
+                request_resources(cmds[k].id, cmds[k].vals);
+                break;
+            case CMD_RL:
+                release_resources(cmds[k].id, cmds[k].vals);
+                break;
+            case CMD_STAR:
+                // Etapa 8: imprimir a tabela e o AVAILABLE
+                break;
         }
     }
-    available[0] = 3; available[1] = 3; available[2] = 2;
 
-    int l1[] = {0, 1, 0};   // cliente 0 tem 0 1 0
-    int l2[] = {1, 0, 0};   // cliente 0 não tem mais isso
-    release_resources(0, l1);   // esperado: Release from customer 0 the resources 0 1 0
-    release_resources(0, l2);   // esperado: erro no stderr, nada em stdout
-    printf("available: %d %d %d (esperado 3 4 2)\n", available[0], available[1], available[2]);
-    printf("need[0]: %d %d %d (esperado 7 5 3)\n", need[0], need[1], need[2]);
-    // FIM DE TEMP
+    free_commands(cmds, ncmds);
 
     // etapas seguintes
 
