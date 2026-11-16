@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <limits.h>
 
 int n, m;
-int *available;
+int *available, *total;
 int *max, *allocation, *need;
 
 int count_lines(){
@@ -30,19 +32,32 @@ void bank_free(void){
     free(max);
     free(allocation);
     free(need);
+    free(total);
 }
 
 int bank_alloc(void){
-    available = calloc(m, sizeof(int));
+    total = calloc(m, sizeof(int));
     max = calloc(n * m, sizeof(int));
     allocation = calloc(n * m, sizeof(int));
     need = calloc(n * m, sizeof(int));
+    available = calloc(m, sizeof(int));
 
-    if (!available || !max || !allocation || !need){
+    if (!available || !max || !allocation || !need || !total){
         bank_free();
         return -1;
     }
 
+    return 0;
+}
+
+static int parse_nonneg(const char *s, int *out){
+    char *end;
+    errno = 0;
+    long v = strtol(s, &end, 10);
+    if (end == s || *end != '\0' || errno != 0 || v < 0 || v > INT_MAX){
+        return -1;
+    }
+    *out = (int)v;
     return 0;
 }
 
@@ -61,10 +76,21 @@ int main(int argc, char *argv[]){
 
     if (bank_alloc() != 0){
         fprintf(stderr, "Erro: falha na alocação de memória.\n");
+        return -1;
     }
+
+    for (int j = 0; j < m; j++){
+        if (parse_nonneg(argv[j + 1], &total[j]) != 0){
+            fprintf(stderr, "Erro: argumento '%s' inválido.\n", argv[j + 1]);
+            bank_free();
+            return -1;
+        }
+        available[j] = total[j];
+    }
+
 
     // etapas seguintes
 
     bank_free();
-    return 1;
+    return 0;
 }
